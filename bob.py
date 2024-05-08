@@ -4,8 +4,7 @@ from scipy import interpolate
 from numpy import where
 from math import sin
 
-# import matplotlib; matplotlib.use('Qt4Agg')
-import matplotlib.pylab as plt
+import matplotlib.pyplot as plt
 plt.get_current_fig_manager().window.raise_()
 
 
@@ -58,13 +57,17 @@ def macCormack(u):
     u[1:] = .5*(u[1:]+up[1:] -  c*(up[1:]-up[:-1]))
     return u[1:-1] 
 
+def beam_warming(u): 
+    u[1:-1] = c/2.0*(1+c)*u[:-2] + (1-c**2)*u[1:-1] - c/2.0*(1-c)*u[2:]
+    return u[1:-1]
+
 
 # Constants and parameters
 a = 1.0 # wave speed
 tmin, tmax = 0.0, 1.0 # start and stop time of simulation
 xmin, xmax = 0.0, 2.0 # start and end of spatial domain
-Nx = 80 # number of spatial points
-c = 0.9 # courant number, need c<=1 for stability
+Nx = 100 # number of spatial points
+c = 0.5 # courant number, need c<=1 for stability
 
 
 # Discretize
@@ -126,7 +129,8 @@ legends.append('Analytical')
 
 plt.xlabel('x-coordinate [-]')
 plt.ylabel('Amplitude [-]')
-plt.legend(legends, loc=3, frameon=False)
+plt.legend(legends, loc=3, frameon=True)
+plt.tight_layout()
  
 # initialization function: plot the background of each frame
 def init():
@@ -153,4 +157,7 @@ def animate_alt(i):
 
  
 # call the animator.  blit=True means only re-draw the parts that have changed.
-anim = animation.FuncAnimation(fig, animate_alt, init_func=init, frames=Nt, interval=100, blit=False)
+anim = animation.FuncAnimation(fig, animate_alt, init_func=init, frames=Nt, interval=1, blit=False)
+writergif = animation.PillowWriter(fps=30)  
+anim.save('bob.gif', writer=writergif) 
+plt.close() 
