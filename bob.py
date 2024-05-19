@@ -12,7 +12,7 @@ LNWDT=2; FNT=15
 plt.rcParams['lines.linewidth'] = LNWDT; plt.rcParams['font.size'] = FNT
 
 
-init_func=1   # Select stair case function (0) or sin^2 function (1)
+init_func=0   # Select stair case function (0) or sin^2 function (1)
 
 # function defining the initial condition
 if (init_func==0):
@@ -66,7 +66,7 @@ def beam_warming(u):
 a = 1.0 # wave speed
 tmin, tmax = 0.0, 1.0 # start and stop time of simulation
 xmin, xmax = 0.0, 2.0 # start and end of spatial domain
-Nx = 100 # number of spatial points
+Nx = 200 # number of spatial points
 c = 0.5 # courant number, need c<=1 for stability
 
 
@@ -159,5 +159,6 @@ def animate_alt(i):
 # call the animator.  blit=True means only re-draw the parts that have changed.
 anim = animation.FuncAnimation(fig, animate_alt, init_func=init, frames=Nt, interval=1, blit=False)
 writergif = animation.PillowWriter(fps=30)  
-anim.save('bob.gif', writer=writergif) 
+plt.show()
+anim.save('bob_1.gif', writer=writergif) 
 plt.close() 
